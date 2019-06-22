@@ -1,0 +1,16 @@
+<h3>Handwritten Mail Address Recognition</h3>
+
+<form class="mt-3" (ngSubmit)="onSubmit()">
+    <input type="file" (change)="onUploadChange($event)" multiple accept=".png, .jpg, .jpeg" />
+    <input type="submit">
+</form>
+
+
+<div class="mt-3">
+    <ul class="list-group" *ngFor="let result of processedResults">
+        <li class="list-group-item">
+            <img src={{result.image}} alt="" id="img">
+            {{result.text}}
+        </li>
+    </ul>
+</div>
