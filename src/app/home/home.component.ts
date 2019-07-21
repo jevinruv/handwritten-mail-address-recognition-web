@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RecognitionService } from '../services/recognition.service';
 import { ImageResult } from '../models/image-result';
 
@@ -7,16 +7,14 @@ import { ImageResult } from '../models/image-result';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
   imageListBase64 = [];
   processedResults: ImageResult[] = [];
   results: ImageResult[] = [];
+  uploadedFiles = [];
 
   constructor(private recognitionService: RecognitionService) { }
-
-  ngOnInit() {
-  }
 
   onUploadChange(evt: any) {
 
@@ -29,7 +27,9 @@ export class HomeComponent implements OnInit {
 
       reader.onload = this.handleReaderLoaded.bind(this);
       reader.readAsBinaryString(files[i]);
+      this.uploadedFiles.push(files[i])
     }
+
   }
 
   handleReaderLoaded(e) {
@@ -42,14 +42,14 @@ export class HomeComponent implements OnInit {
       images: this.imageListBase64
     }
 
-    console.log(imageData);
+    // console.log(imageData);
 
     this.recognitionService.uploadImage(imageData).subscribe((data: ImageResult[]) => {
       console.log(data);
       this.results = data;
       this.changeToImage();
+      this.imageListBase64 = [];
     });
-
 
     // this.recognitionService.test().subscribe(data => {
     //   console.log(data);
@@ -69,4 +69,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  clear() {
+    this.processedResults = [];
+  }
 }
